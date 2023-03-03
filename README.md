@@ -8,7 +8,7 @@ my dotfiles between macOS and linux.
 flag or .stow-local-ignore, but I used this as a Rust learning exercise and like the approach,
 as botched as it is.
 
-**ONLY TESTED ON MACOS AND WINDOWS**
+**ONLY TESTED ON MACOS AND LINUX**
 
 ## Usage
 
