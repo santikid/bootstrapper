@@ -21,6 +21,7 @@ You can use the following as a template:
 {
   "source": "./", // optional - defaults to current directory
   "target": "~/",
+  "ignore": [".git"], // optional - defaults to []
   "features": [
     {
       "name": "macOS features",

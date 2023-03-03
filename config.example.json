@@ -1,6 +1,7 @@
 {
   "source": "./",
   "target": "~/",
+  "ignore": [".git"],
   "features": [
     {
       "name": "Features for macOS",

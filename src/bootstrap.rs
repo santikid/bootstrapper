@@ -4,6 +4,7 @@ use crate::{config, features, stow};
 
 pub fn bootstrap(config: &config::Config, unstow: bool, want_features: &Vec<features::Feature>) {
     let source = config.source.clone().unwrap_or("./".to_string());
+    let ignore = config.ignore.clone().unwrap_or(vec![]);
     let paths = fs::read_dir(source).unwrap();
     let target = shellexpand::full(&config.target).unwrap().to_string();
 
@@ -16,6 +17,9 @@ pub fn bootstrap(config: &config::Config, unstow: bool, want_features: &Vec<feat
         }
 
         let file_name = file.file_name().into_string().unwrap();
+        if ignore.contains(&file_name) {
+            return;
+        }
 
         let features = features::Feature::parse_features(&config.features, &file_name);
         if features.is_none() {
