@@ -1,0 +1,16 @@
+{
+  "source": "./",
+  "target": "~/",
+  "features": [
+    {
+      "name": "Features for macOS",
+      "slug": "macos",
+      "enabled_command": "[[ $OSTYPE == 'darwin'* ]]"
+    },
+    {
+      "name": "Features for Linux",
+      "slug": "linux",
+      "enabled_command": "[[ $OSTYPE == 'linux'* ]]"
+    }
+  ]
+}
