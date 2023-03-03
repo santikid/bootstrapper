@@ -5,6 +5,7 @@ pub struct Feature {
     pub name: String,
     pub slug: String,
     pub enabled_command: Option<String>,
+    pub target: Option<String>,
 }
 
 impl Feature {
@@ -24,6 +25,7 @@ impl Feature {
             let feature = all_features.iter().find(|f| f.slug == *feature_name);
             if feature.is_none() {
                 println!("Error: Feature {} not found", feature_name);
+                return;
             }
             features.push(feature.unwrap().clone())
         });

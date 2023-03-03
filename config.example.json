@@ -12,6 +12,12 @@
       "name": "Features for Linux",
       "slug": "linux",
       "enabled_command": "[[ $OSTYPE == 'linux'* ]]"
+    },
+    {
+      "name": "Linux features in /opt/",
+      "slug": "opt",
+      "enabled_command": "[[ $OSTYPE == 'linux'* ]]",
+      "target": "/opt/"
     }
   ]
 }
