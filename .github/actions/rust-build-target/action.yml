@@ -1,0 +1,25 @@
+name: 'Install Rustup Architecture and Build'
+description: 'Greet someone'
+inputs:
+  arch:
+    description: 'Rust Architecture'
+    required: true
+  channel:
+    description: "rust toolchain channel (default: stable)"
+    default: stable
+outputs:
+  path:
+    description: "executable parent folder path"
+    value: ${{ steps.path.outputs.path }}
+runs:
+  using: "composite"
+  steps:
+    - id: rustup-add-target
+      shell: bash
+      run: "rustup target add ${{ inputs.arch }}"
+    - id: build
+      shell: bash
+      run: "cargo build --release --target=${{ inputs.arch }}"
+    - id: path
+      run: echo "path=target/${{ inputs.arch }}/release" >> $GITHUB_OUTPUT
+      shell: bash
