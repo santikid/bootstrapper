@@ -1,12 +1,9 @@
-name: 'Install Rustup Architecture and Build'
-description: 'Greet someone'
+name: "Install Rustup Architecture and Build"
+description: "install the specified rustup architecture, build the binary and return path to the release folder"
 inputs:
   arch:
-    description: 'Rust Architecture'
+    description: "Rust Architecture"
     required: true
-  channel:
-    description: "rust toolchain channel (default: stable)"
-    default: stable
 outputs:
   path:
     description: "executable parent folder path"
