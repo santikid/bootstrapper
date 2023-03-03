@@ -15,9 +15,9 @@ pub fn stow(target: &str, path: &str, unstow: Option<bool>) -> Result<(), Error>
 
     if unstow.unwrap_or(false) {
         args.insert(0, "-D".to_string());
-        println!("Unstowing {}", target)
+        println!("Unstowing {} from {}", path, target)
     } else {
-        println!("Stowing {}", target)
+        println!("Stowing {} to {}", path, target)
     }
 
     let cmd = Command::new("stow")
