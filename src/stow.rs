@@ -6,20 +6,16 @@ pub struct Error {
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "invalid first item to double")
+        write!(f, "{}", self.error)
     }
 }
 
-pub fn stow(target: &str, path: &str, unstow: Option<bool>) -> Result<(), Error> {
+pub fn stow(target: &str, path: &str, unstow: bool) -> Result<(), Error> {
     let mut args = vec![format!("--target={}", target), format!("{}/", path)];
 
-    if unstow.unwrap_or(false) {
+    if unstow {
         args.insert(0, "-D".to_string());
-        println!("Unstowing {} from {}", path, target)
-    } else {
-        println!("Stowing {} to {}", path, target)
     }
-
     let cmd = Command::new("stow")
         .args(args)
         .output()

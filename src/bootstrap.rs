@@ -2,80 +2,76 @@ use std::fs;
 
 use crate::{config, features, stow};
 
-pub fn bootstrap(config: &config::Config, unstow: bool, want_features: &Vec<features::Feature>) {
+fn target_valid(path: &str) -> bool {
+    let metadata = fs::metadata(path);
+    metadata.is_ok() && metadata.unwrap().permissions().readonly()
+}
+
+pub fn bootstrap(config: &config::Config, unstow: bool) {
+    // get features that need to be bootstrapped
+    let enabled_features = config
+        .features
+        .iter()
+        .filter(|f| f.enabled())
+        .map(|f| f.clone())
+        .collect::<Vec<features::Feature>>();
+
+    println!(
+        "stowing features: {:?}",
+        enabled_features
+            .iter()
+            .map(|f| format!("{} ({})", f.name, f.slug))
+            .collect::<Vec<String>>()
+    );
+
     let source = config.source.clone().unwrap_or("./".to_string());
-    let ignore = config.ignore.clone().unwrap_or(vec![]);
     let paths = fs::read_dir(source).unwrap();
     let default_target = shellexpand::full(&config.target).unwrap().to_string();
 
+    // iterate over all files in the source directory
     paths.for_each(|file| {
         let file = file.unwrap();
 
+        // if the file is not a directory, skip it
         let md = file.metadata().unwrap();
         if !md.is_dir() {
             return;
         }
 
         let file_name = file.file_name().into_string().unwrap();
-        if ignore.contains(&file_name) {
+
+        // get features from the file name
+        let features = features::features_from_name(&enabled_features, &file_name);
+        // if directory has no enabled features, skip it
+        if features.is_none() {
             return;
         }
 
-        let features_on_file = features::Feature::parse_features(&config.features, &file_name);
-        // if no features exist on the file, stow it
-        if features_on_file.is_none() {
-            match stow::stow(&default_target, &file_name, Some(unstow)) {
-                Ok(_) => {}
-                Err(e) => {
-                    println!("could not stow {}: {}", file_name, e.error);
-                }
-            }
-            return;
-        }
+        // get target override from features
+        let target_override = features::get_target_override(&features.unwrap());
 
-        let features_on_file = features_on_file.unwrap();
-        let matching_features = features_on_file
-            .iter()
-            .filter(|feature| want_features.contains(feature))
-            .collect::<Vec<_>>();
-
-        if matching_features.len() == 0 {
-            return;
-        }
-
-        let target_overrides = matching_features
-            .iter()
-            .map(|feature| feature.target.clone())
-            .filter(|target_override| target_override.is_some())
-            .map(|target_override| target_override.unwrap())
-            .collect::<Vec<String>>();
-
-        if target_overrides.len() > 1 {
-            println!(
-                "multiple target overrides found for {}; skipping",
-                file_name
-            );
-            return;
-        }
-
-        let target = match target_overrides.get(0) {
-            Some(target_override) => {
-                let target_override = shellexpand::full(target_override).unwrap().to_string();
-                let metadata = fs::metadata(&target_override);
-                if !metadata.is_ok() || metadata.unwrap().permissions().readonly() {
+        let target = match target_override {
+            Some(t) => {
+                let t = shellexpand::full(&t).unwrap().to_string();
+                if !target_valid(&t) {
                     println!(
-                        "target override {} does not exist or no permission to write; skipping",
-                        target_override
+                        "target directory {} is not valid; permission denied or does not exist",
+                        t
                     );
                     return;
                 }
-                target_override
+                t
             }
             None => default_target.clone(),
         };
 
-        match stow::stow(&target, &file_name, Some(unstow)) {
-            Ok(_) => {}
+        match stow::stow(&target, &file_name, unstow) {
+            Ok(_) if unstow => {
+                println!("unstowed {} from {}", file_name, target);
+            }
+            Ok(_) => {
+                println!("stowed {} to {}", file_name, target);
+            }
             Err(e) => {
                 println!("could not stow {}: {}", file_name, e.error);
             }

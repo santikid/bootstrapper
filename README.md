@@ -22,12 +22,11 @@ You can use the following as a template:
 {
   "source": "./", // optional - defaults to current directory
   "target": "~/",
-  "ignore": [".git"], // optional - defaults to []
   "features": [
     {
       "name": "macOS features",
       "slug": "macos", // the prefix
-      "enabled_command": "[[ $OSTYPE == 'darwin'* ]]" // optional - defaults to true
+      "enabled_command": "[[ $OSTYPE == 'darwin'* ]]" // optional - if not set feature is always enabled 
     },
     {
       "name": "Linux features",
@@ -48,8 +47,7 @@ To assign features, add a prefix to the folder name. For example, if you have a 
 `vim` and you want to enable it on macOS and Linux, rename it to `{macos,linux}vim`. If you
 want to enable it on macOS only, rename it to `{macos}vim`.
 
-If you want to enable a package on all platforms, just leave the prefix off.
-
 You can also override the target-path of a specific feature by specifying another "target" field.
+If a single folder has multiple features with a target override it will be skipped.
 
-Then run `bootstrapper (stow|unstow)` and it will stow the packages that match your features.
+Then run `bootstrapper (stow|unstow)` and it will stow/unstow the packages that match your features.

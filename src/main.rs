@@ -1,5 +1,8 @@
 use std::env;
 
+#[cfg(test)]
+mod test;
+
 mod bootstrap;
 mod config;
 mod features;
@@ -24,21 +27,12 @@ fn main() {
 
     let config = config.unwrap();
 
-    let want_features = features::Feature::want_features(&config.features);
-    println!(
-        "enabled features: {:?}",
-        want_features
-            .iter()
-            .map(|f| format!("{} ({})", f.name, f.slug))
-            .collect::<Vec<String>>()
-    );
-
     match command {
         Some(c) if c == "stow" => {
-            bootstrap::bootstrap(&config, false, &want_features);
+            bootstrap::bootstrap(&config, false);
         }
         Some(c) if c == "unstow" => {
-            bootstrap::bootstrap(&config, true, &want_features);
+            bootstrap::bootstrap(&config, true);
         }
         _ => {
             println!(

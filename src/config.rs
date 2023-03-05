@@ -9,7 +9,6 @@ pub struct Config {
     pub source: Option<String>,
     pub target: String,
     pub features: Vec<Feature>,
-    pub ignore: Option<Vec<String>>,
 }
 
 impl Config {
