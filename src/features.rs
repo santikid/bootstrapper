@@ -16,7 +16,10 @@ impl Feature {
 
         let output = std::process::Command::new("sh")
             .arg("-c")
-            .arg(format!("eval {} && echo true || echo false", self.enabled_command.clone().unwrap()))
+            .arg(format!(
+                "eval {} && echo true || echo false",
+                self.enabled_command.clone().unwrap()
+            ))
             .output()
             .expect("Failed to execute command");
 
@@ -29,27 +32,22 @@ impl Feature {
 pub fn features_from_name(features: &[Feature], name: &str) -> Option<Vec<Feature>> {
     let start = name.find('{');
     let end = name.find('}');
-    
+
     // if start is none or end is none, return none
-    if start.is_none() || end.is_none()  || start.unwrap() > end.unwrap() {
+    if start.is_none() || end.is_none() || start.unwrap() > end.unwrap() {
         return None;
     }
 
-    let feature_string = &name[start.unwrap()+1..end.unwrap()];
+    let feature_string = &name[start.unwrap() + 1..end.unwrap()];
     let features = feature_string
         .split(',')
-        .filter_map(|feature_name| {
-            features 
-                .iter()
-                .find(|f| f.slug == feature_name)
-                .cloned()
-        })
+        .filter_map(|feature_name| features.iter().find(|f| f.slug == feature_name).cloned())
         .collect::<Vec<Feature>>();
 
-        if features.len() == 0 {
-            return None;
-        }
-        Some(features)
+    if features.len() == 0 {
+        return None;
+    }
+    Some(features)
 }
 
 pub fn get_target_override(features: &[Feature]) -> Option<String> {
@@ -58,7 +56,7 @@ pub fn get_target_override(features: &[Feature]) -> Option<String> {
         .filter_map(|f| f.target.clone())
         .collect::<Vec<String>>();
 
-    if target_overrides.len() > 1 || target_overrides.len() == 0{
+    if target_overrides.len() > 1 || target_overrides.len() == 0 {
         return None;
     }
 

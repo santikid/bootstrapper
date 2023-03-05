@@ -13,7 +13,7 @@ mod tests {
                 name: "linux".to_string(),
                 slug: "linux".to_string(),
                 target: None,
-                enabled_command: Some("[[ 1 == 1 ]]".to_string()),
+                enabled_command: Some("true".to_string()),
             },
             Feature {
                 name: "windows".to_string(),
