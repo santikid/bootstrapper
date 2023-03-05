@@ -39,7 +39,6 @@ fn main() {
                 "unknown command: {}; options are: stow, unstow",
                 command.unwrap()
             );
-            return;
         }
     }
 }

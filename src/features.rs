@@ -44,7 +44,7 @@ pub fn features_from_name(features: &[Feature], name: &str) -> Option<Vec<Featur
         .filter_map(|feature_name| features.iter().find(|f| f.slug == feature_name).cloned())
         .collect::<Vec<Feature>>();
 
-    if features.len() == 0 {
+    if features.is_empty() {
         return None;
     }
     Some(features)
@@ -56,7 +56,7 @@ pub fn get_target_override(features: &[Feature]) -> Option<String> {
         .filter_map(|f| f.target.clone())
         .collect::<Vec<String>>();
 
-    if target_overrides.len() > 1 || target_overrides.len() == 0 {
+    if target_overrides.is_empty() || target_overrides.len() > 1 {
         return None;
     }
 

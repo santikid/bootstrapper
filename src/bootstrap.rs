@@ -13,7 +13,7 @@ pub fn bootstrap(config: &config::Config, unstow: bool) {
         .features
         .iter()
         .filter(|f| f.enabled())
-        .map(|f| f.clone())
+        .cloned()
         .collect::<Vec<features::Feature>>();
 
     println!(
