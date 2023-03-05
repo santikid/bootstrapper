@@ -4,15 +4,16 @@ Bootstrapper is a simple tool for using GNU Stow conditionally. You can define f
 bash conditional and stow will only be run if the condition is true. I use it for seperating
 my dotfiles between macOS and linux.
 
-**PLEASE DO NOT USE THIS**, there is definitely a better way to achieve this with the --ignore
-flag or .stow-local-ignore, but I used this as a Rust learning exercise and like the approach,
+**DO NOT USE THIS**, there is definitely a better way to achieve this with the --ignore
+flag or .stow-local-ignore (or simply having one bash script per feature and looping over 
+the folders you need), but I used this as a Rust learning exercise and like the approach,
 as botched as it is.
 
 **ONLY TESTED ON MACOS AND LINUX**
 
 ## Usage
 
-Make sure stow is installed and in your path.
+Make sure GNU stow is installed and in your path.
 
 In the folder that contains your stow packages, create a file called `bootstrapper.json`.
 You can use the following as a template:
