@@ -1,4 +1,6 @@
-# Bootstrapper
+# DEPRECATED: Use [santikid/clink](https://github.com/santikid/clink) instead
+
+## Bootstrapper
 
 Bootstrapper is a simple tool for using GNU Stow conditionally. You can define features with a
 bash conditional and stow will only be run if the condition is true. I use it for seperating
